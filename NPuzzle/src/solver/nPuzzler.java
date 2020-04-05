@@ -16,6 +16,7 @@ class nPuzzler
 	
 	public static void main(String[] args)
 	{
+		long startTime = System.nanoTime();
 		//Create method objects
 		InitMethods();
 		
@@ -58,6 +59,10 @@ class nPuzzler
 		
 		//Print information about this solution
 		System.out.println(args[0] + "   " + method + "   " + thisMethod.Searched.size());
+
+		long endTime = System.nanoTime();
+		System.out.println("Executed in: " + (endTime - startTime) + "ns");
+
 		if(thisSolution == null)
 		{
 			//No solution found :(

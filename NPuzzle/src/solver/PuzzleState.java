@@ -61,8 +61,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 			System.out.println("There was an error in processing! Aborting...");
 			System.exit(1);
 		}
+
 		result = new direction[countMovements(blankLocation)];
 		int thisIndex = 0;
+
 		if(blankLocation[0] == 0)
 		{
 			//the blank cell is already as far left as it will go, it can move right
@@ -92,6 +94,15 @@ public class PuzzleState implements Comparable<PuzzleState>
 			result[thisIndex++] = direction.Up;
 			result[thisIndex++] = direction.Down;
 		}
+		
+		// LITERALLY BY ADDING JUST THIS, THE PROGRAM IS ABOUT 33% FASTER AND 12% MORE SPACE-EFFICIENT.
+		/*
+		Results:
+		No array sorting:	Size = 52497	Time = 105,352,915,500ns
+		With array sorting:	Size = 46545	Time = 76,797,189,100ns
+		*/
+		Arrays.sort(result);
+
 		return result;
 	}
 	
@@ -104,12 +115,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 		
 			for(int i = 0; i <= 1; i++)
 			{
-				if(blankLocation[i] == 0
-					|| blankLocation[i] == (Puzzle.length - 1))
-				{
-					//do nothing
-				}
-				else
+				if(!(blankLocation[i] == 0
+					|| blankLocation[i] == (Puzzle.length - 1)))
 				{
 					result++;
 				}
@@ -117,14 +124,16 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		catch (InvalidPuzzleException e)
 		{
-			//do something
+			// Big uh-oh
+			System.out.println("countMovements ran into an error (PuzzleState.java). Aborting.");
+			System.exit(1);
 		}
 		return result;
 	}
 	
 	private int[] findBlankCell() throws InvalidPuzzleException
 	{
-		for(int i = 0; i < Puzzle.length; i++)
+		for(int i = 0; i < Puzzle.length; i++) // Loops through the current grid of tiles on the board to find where the '0' tile is.
 		{
 			for(int j = 0; j < Puzzle[i].length; j++)
 			{
@@ -172,22 +181,22 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		try
 		{
-			//move the blank cell in the new child puzzle
-			
+			// move the blank cell in the new child puzzle
+			// Everything must be UP, LEFT, DOWN, RIGHT, just to be sure.
 			if(aDirection == direction.Up)
 			{
 				result.Puzzle[blankCell[0]][blankCell[1]] = result.Puzzle[blankCell[0]][blankCell[1] - 1];
 				result.Puzzle[blankCell[0]][blankCell[1] - 1] = 0;
 			}
-			else if(aDirection == direction.Down)
-			{
-				result.Puzzle[blankCell[0]][blankCell[1]] = result.Puzzle[blankCell[0]][blankCell[1] + 1];
-				result.Puzzle[blankCell[0]][blankCell[1] + 1] = 0;
-			}
 			else if(aDirection == direction.Left)
 			{
 				result.Puzzle[blankCell[0]][blankCell[1]] = result.Puzzle[blankCell[0] - 1][blankCell[1]];
 				result.Puzzle[blankCell[0] - 1][blankCell[1]] = 0;
+			}
+			else if(aDirection == direction.Down)
+			{
+				result.Puzzle[blankCell[0]][blankCell[1]] = result.Puzzle[blankCell[0]][blankCell[1] + 1];
+				result.Puzzle[blankCell[0]][blankCell[1] + 1] = 0;
 			}
 			else	//aDirection == Right;
 			{
@@ -241,7 +250,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 				System.out.println("There was an error in processing! Aborting...");
 				System.exit(1);
 			}
-		}	
+		}
 		return Children;
 	}
 	
