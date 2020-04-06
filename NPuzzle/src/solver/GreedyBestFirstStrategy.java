@@ -33,26 +33,29 @@ public class GreedyBestFirstStrategy extends SearchMethod
 		//keep searching the fringe until it's empty.
 		//Items are "popped" from the fringe in order of lowest heuristic value.
 		
-		//Add the start state to the fringe
+		// Put the start state in the Fringe to get explored.
 		addToFrontier(aPuzzle.StartState);
+
+		ArrayList<PuzzleState> newStates = new ArrayList<PuzzleState>();
+
 		while(Frontier.size() > 0)
 		{
-			//get the next State
+			// Get the next item off the fringe
 			PuzzleState thisState = popFrontier();
 			
-			//is this the goal state?
+			// Is it the goal state?
 			if(thisState.equals(aPuzzle.GoalState))
 			{
+				// We have found a solution! return it!
 				return thisState.GetPathToState();
 			}
-			
-			//not the goal state, explore this node
-			ArrayList<PuzzleState> newStates = thisState.explore();
+			// This isn't the goal, just explore the node
+			newStates = thisState.explore();
 			
 			for(int i = 0; i < newStates.size(); i++)
 			{
 				PuzzleState newChild = newStates.get(i);
-				//if you can add these new states to the fringe
+				// Add this state to the fringe if possible. Will take care of duplicates.
 				if(addToFrontier(newChild))
 				{
 					//then, work out it's heuristic value
@@ -62,13 +65,8 @@ public class GreedyBestFirstStrategy extends SearchMethod
 				
 			}
 			
-			//Sort the fringe by it's Heuristic Value. The PuzzleComparator uses each nodes EvaluationFunction
+			// Sort the fringe by it's Heuristic Value. The PuzzleComparator uses each nodes EvaluationFunction
 			// to determine a node's value, based on another. The sort method uses this to sort the Fringe.
-			// 
-			// TODO: is this the correct way to sort the frontier as specified in the Assignment: 
-			// When all else is equal, nodes should be expanded according to the following order: 
-			// the agent should try to move the empty cell UP before attempting LEFT, before 
-			// attempting DOWN, before attempting RIGHT, in that order.
 			Collections.sort(Frontier, new PuzzleComparator());
 		}
 		

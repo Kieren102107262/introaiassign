@@ -58,7 +58,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		catch(InvalidPuzzleException e)
 		{
-			System.out.println("There was an error in processing! Aborting...");
+			System.out.println("Could not find 0 tile! Aborting...");
 			System.exit(1);
 		}
 
@@ -85,7 +85,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			//the blank cell is already as far up as it will go, it can move down
 			result[thisIndex++] = direction.Down;
 		}
-		else if(blankLocation[1] == (Puzzle.length - 1))
+		else if(blankLocation[1] == (Puzzle[0].length - 1))
 		{
 			result[thisIndex++] = direction.Up;
 		}
@@ -95,7 +95,11 @@ public class PuzzleState implements Comparable<PuzzleState>
 			result[thisIndex++] = direction.Down;
 		}
 		
-		// LITERALLY BY ADDING JUST THIS, THE PROGRAM IS ABOUT 33% FASTER AND 12% MORE SPACE-EFFICIENT.
+		//System.out.println("Ran getPossibleActions. blankLocation[0] = " + blankLocation[0] + " | blankLocation[1] = " + blankLocation[1]);
+		//System.out.println("Results at end: " + Arrays.deepToString(result));
+
+		// By adding just this, the program is about 33% faster and 12% more space-efficient.
+		// Note that this doesn't actually apply to REALLY small sets, but it works well on large sets.
 		/*
 		Results:
 		No array sorting:	Size = 52497	Time = 105,352,915,500ns
@@ -112,14 +116,16 @@ public class PuzzleState implements Comparable<PuzzleState>
 		try
 		{
 			blankLocation = findBlankCell();
-		
-			for(int i = 0; i <= 1; i++)
+			if(blankLocation[0] != 0
+				&& blankLocation[0] != (Puzzle.length - 1))
 			{
-				if(!(blankLocation[i] == 0
-					|| blankLocation[i] == (Puzzle.length - 1)))
-				{
-					result++;
-				}
+				// Previously used OR (||), now uses AND (&&). Unnecessary else statement.
+				result++;
+			}
+			if(blankLocation[1] != 0
+				&& blankLocation[1] != (Puzzle[0].length - 1))
+			{
+				result++;
 			}
 		}
 		catch (InvalidPuzzleException e)
@@ -182,7 +188,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		try
 		{
 			// move the blank cell in the new child puzzle
-			// Everything must be UP, LEFT, DOWN, RIGHT, just to be sure.
+			// Everything has been made to be in the order of UP, LEFT, DOWN, RIGHT, just to be sure.
 			if(aDirection == direction.Up)
 			{
 				result.Puzzle[blankCell[0]][blankCell[1]] = result.Puzzle[blankCell[0]][blankCell[1] - 1];
@@ -221,7 +227,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			for(int j = 0; j < Puzzle[i].length; j++)
 			{
 				if(this.Puzzle[i][j] != aState.Puzzle[i][j])
-					return false;		//stop checking as soon as we find an 
+					return false;		// Stop checking as soon as we find an 
 										// element that doesn't match
 			}
 		}
@@ -236,7 +242,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	
 	public ArrayList<PuzzleState> explore()
 	{
-		//populate children
+		// Populate children
 		direction[] possibleMoves = getPossibleActions();
 		Children = new ArrayList<PuzzleState>();
 		for(int i = 0; i < possibleMoves.length; i++)
@@ -247,7 +253,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			}
 			catch (CantMoveThatWayException e)
 			{
-				System.out.println("There was an error in processing! Aborting...");
+				System.out.println("Explored illegal move " + possibleMoves[i] + "! Aborting...");
 				System.exit(1);
 			}
 		}
@@ -256,15 +262,11 @@ public class PuzzleState implements Comparable<PuzzleState>
 	
 	public direction[] GetPathToState()
 	{
-		direction result[];
-		
-		if(Parent == null)	//If this is the root node, there is no path!
+		if(Parent != null)
 		{
-			result = new direction[0];
-			return result;
-		} else				//Other wise, path to here is the path to parent
-							// plus parent to here
-		{
+			// The path to here is the path to parent
+			// plus parent to here
+			/*
 			direction[] pathToParent = Parent.GetPathToState();
 			result = new direction[pathToParent.length + 1];
 			for(int i = 0; i < pathToParent.length; i++)
@@ -272,6 +274,16 @@ public class PuzzleState implements Comparable<PuzzleState>
 				result[i] = pathToParent[i];
 			}
 			result[result.length - 1] = this.PathFromParent;
+			return result;
+			*/
+			direction[] pathToParent = Parent.GetPathToState();
+			direction[] result = Arrays.copyOf(pathToParent, pathToParent.length + 1);
+			result[result.length - 1] = this.PathFromParent;
+			return result;
+		} else
+		{
+			// If this is the root node, there is no path!
+			direction[] result = new direction[0];
 			return result;
 		}
 	}

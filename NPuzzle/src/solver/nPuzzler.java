@@ -61,11 +61,11 @@ class nPuzzler
 		System.out.println(args[0] + "   " + method + "   " + thisMethod.Searched.size());
 
 		long endTime = System.nanoTime();
-		System.out.println("Executed in: " + (endTime - startTime) + "ns");
+		System.out.println("Executed in: " + ((endTime - startTime) / 1000000) + "ms");
 
 		if(thisSolution == null)
 		{
-			//No solution found :(
+			// No solution found :(
 			System.out.println("No solution found.");
 		}
 		else
@@ -102,21 +102,22 @@ class nPuzzler
 			String puzzleDimension = puzzle.readLine();
 			//split the string by letter "x"
 			String[] bothDimensions = puzzleDimension.split("x");
-		
-			//work out the "physical" size of the puzzle
-			//here we only deal with NxN puzzles, so the puzzle size is taken to be the first number
-			int puzzleSize = Integer.parseInt(bothDimensions[0]);
+
+			int puzzleWidth = Integer.parseInt(bothDimensions[0]);
+			int puzzleHeight = Integer.parseInt(bothDimensions[1]);
+
+			System.out.println("Puzzle width and height is " + puzzleWidth + "x" + puzzleHeight);
 			
-			int[][] startPuzzleGrid = new int[puzzleSize][puzzleSize];
-			int[][] goalPuzzleGrid = new int[puzzleSize][puzzleSize];
+			int[][] startPuzzleGrid = new int[puzzleWidth][puzzleHeight];
+			int[][] goalPuzzleGrid = new int[puzzleWidth][puzzleHeight];
 			
 			//fill in the start state
 			String startStateString = puzzle.readLine();
-			startPuzzleGrid = ParseStateString(startStateString, startPuzzleGrid, puzzleSize);
+			startPuzzleGrid = ParseStateString(startStateString, startPuzzleGrid, puzzleWidth);
 			
 			//fill in the end state
 			String goalStateString = puzzle.readLine();
-			goalPuzzleGrid = ParseStateString(goalStateString, goalPuzzleGrid, puzzleSize);
+			goalPuzzleGrid = ParseStateString(goalStateString, goalPuzzleGrid, puzzleWidth);
 			
 			//create the nPuzzle object...
 			result = new nPuzzle(startPuzzleGrid, goalPuzzleGrid);
@@ -145,10 +146,11 @@ class nPuzzler
 	
 	private static int[][] ParseStateString(String stateString, int[][] puzzleGrid, int pWidth)
 	{
-		//Parse state string converts the text file's format for each puzzle into
+		// Parse state string converts the text file's format for each puzzle into
 		// multidimensional arrays.
 		
 		//split the string by spaces
+		System.out.println("stateString given as " + stateString);
 		String[] tileLocations = stateString.split(" ");
 		
 		// the top-left corner of the puzzle has a coordinate of [0,0]
@@ -170,7 +172,7 @@ class nPuzzler
 			puzzleGrid[x][y] = tileNumber;
 			x++;
 		}
-		
+		System.out.println("Generated grid: " + Arrays.deepToString(puzzleGrid));
 		return puzzleGrid;
 	}
 }
