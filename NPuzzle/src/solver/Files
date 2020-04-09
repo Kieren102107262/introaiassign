@@ -1,5 +1,6 @@
 BFSStrategy.java
 CantMoveThatWayException.java
+DFSStrategy.java
 direction.java
 Frontier.java
 GreedyBestFirstStrategy.java

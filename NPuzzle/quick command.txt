@@ -1,0 +1,1 @@
+javac --release 8 -d "C:\Users\turtl\Desktop\Uni Yr3 Sem1\COS30019 - Intro to AI\ASSIGNMENT 1 - TREE SEARCH\NPuzzle\bin" @Files
