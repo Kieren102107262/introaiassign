@@ -22,18 +22,18 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PathFromParent = aFromParent;
 		Puzzle = aPuzzle;
 		Cost = Parent.Cost + 1;
-		EvaluationFunction = 0;
-		HeuristicValue = 0;
+		EvaluationFunction = 9999999;
+		HeuristicValue = 9999999;
 	}
 	
 	public PuzzleState(int[][] aPuzzle)
 	{
 		Parent = null;
 		PathFromParent = null;
-		Cost = 0;
+		Cost = 9999999;
 		Puzzle = aPuzzle;
-		EvaluationFunction = 0;
-		HeuristicValue = 0;
+		EvaluationFunction = 9999999;
+		HeuristicValue = 9999999;
 	}
 	
 	public int getEvaluationFunction()

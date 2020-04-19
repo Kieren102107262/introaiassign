@@ -10,7 +10,7 @@ class nPuzzler
 {
 	
 	//the number of methods programmed into nPuzzler
-	public static final int METHOD_COUNT = 3;
+	public static final int METHOD_COUNT = 4;
 	public static nPuzzle gPuzzle;
 	public static SearchMethod[] lMethods;
 	
@@ -88,6 +88,7 @@ class nPuzzler
 		lMethods[0] = new BFSStrategy();
 		lMethods[1] = new GreedyBestFirstStrategy();
 		lMethods[2] = new DFSStrategy();
+		lMethods[3] = new AStarStrategy();
 	}
 	
 	private static nPuzzle readProblemFile(String fileName) // this allow only one puzzle to be specified in a problem file 

@@ -49,7 +49,6 @@ public class Frontier {
 	public void SortByCostAsc()
 	{
 		//TODO: Implement SortByCostAsc()
-		
 	}
 	
 	public void SortByCostDesc()
@@ -60,6 +59,11 @@ public class Frontier {
 	public void SortByHeuristicAsc()
 	{
 		//TODO: Implement SortByHeuristicAsc()
+		// NOTE: PuzzleState implements the Comparable features. This allows you to do something like:
+		// Collections.sort(Items, Collections.reverseOrder()); and the list will be sorted, but
+		// it uses the 'EvaluationFunction' variable to compare. I'm not sure how I'm going to manipulate that, or if that will have side-effects
+		// for the rest of the algorithm...
+		// 'EvaluationFunction' can be modified using a function. It's a private variable with a getter and setter in PuzzleState.java.
 	}
 	
 	public void SortByHeuristicDesc()

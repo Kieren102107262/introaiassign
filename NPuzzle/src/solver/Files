@@ -1,3 +1,4 @@
+AStarStrategy.java
 BFSStrategy.java
 CantMoveThatWayException.java
 DFSStrategy.java
