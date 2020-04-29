@@ -1,3 +1,5 @@
+[Old readme. Practically unedited since the beginning. See the report document for updated details on parameters, bugs, etc.]
+
 Author: COS30019
 Sample code base for the N-Puzzle (or, NxN-Puzzle) problem
 
